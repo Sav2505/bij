@@ -1,0 +1,9 @@
+packages:
+  - 'Frontend'
+  - 'Backend'
+  - 'Shared'
+allowBuilds:
+  '@prisma/engines': true
+  bcrypt: true
+  esbuild: true
+  prisma: true

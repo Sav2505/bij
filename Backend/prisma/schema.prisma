@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum ContactCategory {
+  MANAGEMENT
+  IT
+  MAINTENANCE
+  PROCUREMENT
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  IMPORT
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         Role     @default(USER)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  auditLogs     AuditLog[]
+  importHistory ImportHistory[]
+
+  @@map("users")
+}
+
+model HotelNetwork {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  hotels Hotel[]
+
+  @@map("hotel_networks")
+}
+
+model Hotel {
+  id                    String   @id @default(uuid())
+  networkId             String?  @map("network_id")
+  name                  String
+  location              String?
+  contentProvider       String?  @map("content_provider")
+  viggoRegistrationCode String?  @map("viggo_registration_code")
+  technicianCode        String?  @map("technician_code")
+  serviceSupport        String?  @map("service_support")
+  deviceType            String?  @map("device_type")
+  ipConnection          String?  @map("ip_connection")
+  channelSource         String?  @map("channel_source")
+  switches              String?
+  salesPerson           String?  @map("sales_person")
+  notes                 String?
+  siteContact           String?  @map("site_contact")
+  activeSpareLicenses   Int?     @map("active_spare_licenses")
+  hotLicenseCount       Int?     @map("hot_license_count")
+  hotLicenseNotes       String?  @map("hot_license_notes")
+  roomCount             Int?     @map("room_count")
+  remarks               String?
+  isDeleted             Boolean  @default(false) @map("is_deleted")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  network  HotelNetwork? @relation(fields: [networkId], references: [id])
+  contacts Contact[]
+
+  @@index([networkId])
+  @@index([name])
+  @@index([location])
+  @@index([isDeleted])
+  @@map("hotels")
+}
+
+model Contact {
+  id        String          @id @default(uuid())
+  hotelId   String          @map("hotel_id")
+  category  ContactCategory
+  name      String?
+  role      String?
+  phone     String?
+  email     String?
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  hotel Hotel @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+
+  @@index([hotelId])
+  @@map("contacts")
+}
+
+model AuditLog {
+  id         String      @id @default(uuid())
+  userId     String?     @map("user_id")
+  action     AuditAction
+  entityType String?     @map("entity_type")
+  entityId   String?     @map("entity_id")
+  oldValue   Json?       @map("old_value")
+  newValue   Json?       @map("new_value")
+  createdAt  DateTime    @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@map("audit_logs")
+}
+
+model ImportHistory {
+  id          String   @id @default(uuid())
+  filename    String
+  importedBy  String?  @map("imported_by")
+  totalRows   Int      @default(0) @map("total_rows")
+  successRows Int      @default(0) @map("success_rows")
+  errorRows   Int      @default(0) @map("error_rows")
+  errorsJson  Json?    @map("errors_json")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [importedBy], references: [id])
+
+  @@map("import_history")
+}
