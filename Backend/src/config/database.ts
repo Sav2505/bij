@@ -3,7 +3,11 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 import 'dotenv/config';
 
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL! });
+const isRemote = process.env.DATABASE_URL?.includes('render.com');
+const pool = new pg.Pool({
+  connectionString: process.env.DATABASE_URL!,
+  ssl: isRemote ? { rejectUnauthorized: false } : false,
+});
 const adapter = new PrismaPg(pool);
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
