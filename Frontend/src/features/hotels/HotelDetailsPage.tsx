@@ -54,8 +54,22 @@ function ContactCard({ contact }: { contact: Contact }) {
         </Box>
       </Box>
       {contact.role && <Typography variant="body2" color="text.secondary" mb={0.5}>{contact.role}</Typography>}
-      {contact.phone && <Typography variant="body2">📞 {contact.phone}</Typography>}
-      {contact.email && <Typography variant="body2">✉️ {contact.email}</Typography>}
+      {contact.phone && (
+        <Typography variant="body2">
+          📞{' '}
+          <a href={`tel:${contact.phone.replace(/\s/g, '')}`} style={{ color: 'inherit', textDecoration: 'none', fontWeight: 500 }}>
+            {contact.phone}
+          </a>
+        </Typography>
+      )}
+      {contact.email && (
+        <Typography variant="body2">
+          ✉️{' '}
+          <a href={`mailto:${contact.email}`} style={{ color: 'inherit', textDecoration: 'none', fontWeight: 500 }}>
+            {contact.email}
+          </a>
+        </Typography>
+      )}
     </Card>
   );
 }

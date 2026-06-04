@@ -19,7 +19,7 @@ function DashboardBanner() {
           display: 'flex', flexDirection: 'column', alignItems: 'flex-end',
         }}
       >
-        <Typography variant="h5" fontWeight={800} sx={{ position: 'relative', zIndex: 1 }}>
+        <Typography variant="h5" sx={{ position: 'relative', zIndex: 1 }}>
           לוח מחוונים
         </Typography>
         <Typography variant="body2" sx={{ opacity: 0.7, mt: 0.5, position: 'relative', zIndex: 1 }}>
@@ -54,22 +54,8 @@ function StatCard({ title, value, icon, color, delay }: StatCardProps) {
         }}
       >
         <CardContent sx={{ p: 3 }}>
-          {/*
-            flexDirection: row-reverse  →  first DOM child is placed at the RIGHT edge,
-            second DOM child is placed to its LEFT.
-            So: [TextBox , IconBox]  →  TextBox on RIGHT, IconBox on LEFT.
-          */}
-          <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-            {/* Text – RIGHT */}
-            <Box sx={{ textAlign: 'right' }}>
-              <Typography variant="body2" color="text.secondary" fontWeight={500} mb={1}>
-                {title}
-              </Typography>
-              <Typography variant="h4" fontWeight={800} color="text.primary" letterSpacing="-0.03em">
-                {typeof value === 'number' ? value.toLocaleString('he-IL') : value}
-              </Typography>
-            </Box>
-            {/* Icon – LEFT */}
+          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+            {/* Text – RIGHT (first child = right in RTL) */}
             <Box
               sx={{
                 background: `linear-gradient(135deg, ${color} 0%, ${color}CC 100%)`,
@@ -79,6 +65,15 @@ function StatCard({ title, value, icon, color, delay }: StatCardProps) {
             >
               {icon}
             </Box>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", minWidth: 0 }}>
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                {title}
+              </Typography>
+              <Typography variant="h4">
+                {typeof value === 'number' ? value.toLocaleString('he-IL') : value}
+              </Typography>
+            </Box>
+            {/* Icon – LEFT */}
           </Box>
         </CardContent>
       </Card>
@@ -105,33 +100,55 @@ function RecentUpdateRow({ hotel, isLast, onNavigate }: RecentUpdateRowProps) {
     <Box
       onClick={() => onNavigate(hotel.id)}
       sx={{
-        px: 3, py: 1.75,
-        /*
-          row-reverse: first DOM child (HotelInfo) → RIGHT edge,
-                       second DOM child (Meta)      → LEFT edge.
-          space-between fills the remaining space between them.
-        */
-        display: 'flex', flexDirection: 'row-reverse',
+        px: 3, py: 1.5,
+        display: 'flex', flexDirection: 'row',
         alignItems: 'center', justifyContent: 'space-between',
         borderBottom: !isLast ? '1px solid' : 'none',
         borderColor: 'divider',
         cursor: 'pointer', transition: 'background 0.15s',
         '&:hover': { bgcolor: 'action.hover' },
+        gap: 2,
+        width: "100%",
       }}
     >
-      {/* Hotel info – RIGHT */}
-      <Box sx={{ textAlign: 'right', minWidth: 0 }}>
-        <Typography variant="body1" fontWeight={600} noWrap>{hotel.name}</Typography>
-        <Typography variant="body2" color="text.secondary">
-          {hotel.network?.name ?? '—'} · {hotel.location ?? '—'}
-        </Typography>
-      </Box>
-      {/* Meta (date + chip) – LEFT */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
-        <Typography variant="caption" color="text.secondary">
+      {/* ── Meta (LEFT – first child) – fixed width so all rows align ── */}
+      <Box
+        sx={{
+          display: 'flex', flexDirection: 'row',
+          alignItems: 'center', gap: 1,
+          width: "80%",
+          direction: "rtl",
+        }}
+      >
+        {hotel.deviceType && (
+          <Chip
+            label={hotel.deviceType}
+            size="small"
+            variant="outlined"
+            sx={{ fontSize: '0.75rem', height: 20, borderRadius: '6px' }}
+          />
+        )}
+        <Typography
+          variant="caption"
+          color="text.disabled"
+          sx={{ whiteSpace: 'nowrap', fontSize: '0.8rem' }}
+        >
           {new Date(hotel.updatedAt).toLocaleDateString('he-IL')}
         </Typography>
-        {hotel.deviceType && <Chip label={hotel.deviceType} size="small" variant="outlined" />}
+      </Box>
+
+      {/* ── Hotel info (RIGHT – last child) ── */}
+      <Box sx={{ minWidth: 0, flex: 1, direction: 'rtl', textAlign: "left" }}>
+        <Typography
+          variant="body2"
+          noWrap
+          sx={{ color: 'text.primary', lineHeight: 1.6, fontWeight: 700, fontSize: '1rem', }}
+        >
+          {hotel.name}
+        </Typography>
+        <Typography variant="caption" color="text.secondary" noWrap sx={{ display: 'block' }}>
+          {[hotel.network?.name, hotel.location].filter(Boolean).join(' · ') || '—'}
+        </Typography>
       </Box>
     </Box>
   );
@@ -149,13 +166,9 @@ function RecentUpdatesCard({ isLoading, updates, onNavigate }: RecentUpdatesCard
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.4 }}>
       <Card>
         <CardContent sx={{ p: 0 }}>
-          {/*
-            Section header: row-reverse → Typography (first) on RIGHT, UpdateIcon (second) on LEFT.
-            justify-content: flex-end with row-reverse packs items to the RIGHT side.
-          */}
-          <Box sx={{ px: 3, py: 2.5, display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'flex-end', gap: 1.5 }}>
-            <Typography variant="h6" fontWeight={600}>עדכונים אחרונים</Typography>
+          <Box sx={{ px: 3, py: 2.5, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', gap: 1.5 }}>
             <UpdateIcon color="primary" />
+            <Typography variant="h6" sx={{ fontWeight: "600" }}>עדכונים אחרונים</Typography>
           </Box>
           <Divider />
 

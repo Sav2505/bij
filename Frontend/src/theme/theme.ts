@@ -46,9 +46,15 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: `
-        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
-        html, body { direction: rtl; text-align: start; }
+        html, body {
+          direction: rtl;
+          text-align: start;
+          font-family: 'Heebo', 'Arial', sans-serif;
+        }
         * { box-sizing: border-box; }
+        input, button, textarea, select {
+          font-family: 'Heebo', 'Arial', sans-serif;
+        }
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
@@ -64,6 +70,18 @@ const theme = createTheme({
           minHeight: 42,
           fontWeight: 600,
           transition: 'all 0.2s ease',
+        },
+        // In RTL, startIcon lands on the right → marginLeft becomes marginRight (auto-flipped)
+        // Increase the gap (8→12) and reduce the negative outer edge (-4→-2)
+        startIcon: {
+          marginLeft: 8,
+          marginRight: -2,
+          '& > *:nth-of-type(1)': { fontSize: '1.1rem' },
+        },
+        endIcon: {
+          marginRight: 8,
+          marginLeft: -2,
+          '& > *:nth-of-type(1)': { fontSize: '1.1rem' },
         },
         containedPrimary: {
           background: `linear-gradient(135deg, ${PRIMARY} 0%, ${PRIMARY_L} 100%)`,
