@@ -20,20 +20,20 @@ interface SidebarProps {
 
 const navItems = [
   { label: 'לוח מחוונים', icon: <DashboardIcon fontSize="small" />, path: '/dashboard' },
-  { label: 'מלונות',       icon: <HotelIcon     fontSize="small" />, path: '/hotels'    },
+  { label: 'מלונות', icon: <HotelIcon fontSize="small" />, path: '/hotels' },
 ];
 
 const adminItems = [
-  { label: 'ניהול משתמשים', icon: <PeopleIcon     fontSize="small" />, path: '/admin/users'  },
-  { label: 'ייבוא נתונים',  icon: <UploadFileIcon fontSize="small" />, path: '/admin/import' },
+  { label: 'ניהול משתמשים', icon: <PeopleIcon fontSize="small" />, path: '/admin/users' },
+  { label: 'ייבוא נתונים', icon: <UploadFileIcon fontSize="small" />, path: '/admin/import' },
 ];
 
 // Colors for the dark sidebar
-const SIDEBAR_BG    = '#0D1F38';
-const ACTIVE_BG     = 'rgba(59,130,246,0.18)';
-const ACTIVE_COLOR  = '#60A5FA';
-const TEXT_COLOR    = 'rgba(255,255,255,0.72)';
-const TEXT_HOVER    = 'rgba(255,255,255,0.95)';
+const SIDEBAR_BG = '#0D1F38';
+const ACTIVE_BG = 'rgba(59,130,246,0.18)';
+const ACTIVE_COLOR = '#60A5FA';
+const TEXT_COLOR = 'rgba(255,255,255,0.72)';
+const TEXT_HOVER = 'rgba(255,255,255,0.95)';
 const DIVIDER_COLOR = 'rgba(255,255,255,0.08)';
 
 function NavItem({ item, active, onClick }: { item: { label: string; icon: React.ReactNode; path: string }; active: boolean; onClick: () => void }) {
@@ -102,7 +102,7 @@ function SidebarContent({ drawerWidth }: { drawerWidth: number }) {
           >
             <HotelIcon sx={{ color: 'white', fontSize: 20 }} />
           </Box>
-          <Box>
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: 'right' }}>
             <Typography
               sx={{
                 color: 'white',
@@ -115,7 +115,7 @@ function SidebarContent({ drawerWidth }: { drawerWidth: number }) {
               B-Zone
             </Typography>
             <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem', fontWeight: 400 }}>
-              מערכת ניהול
+              ניהול תיקי אתר - IPTV
             </Typography>
           </Box>
         </Box>

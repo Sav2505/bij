@@ -74,28 +74,42 @@ export default function HotelsListPage() {
     <Box>
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: 2 }}>
-          <Box>
-            <Typography variant="h5" fontWeight={700}>מלונות</Typography>
-            <Typography variant="body2" color="text.secondary">
-              {total.toLocaleString('he-IL')} מלונות במערכת
-            </Typography>
-          </Box>
           {isAdmin && (
             <Button variant="contained" startIcon={<AddIcon />} onClick={() => setFormOpen(true)} size="large">
               הוסף מלון
             </Button>
           )}
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>מלונות</Typography>
+            <Typography variant="body2" color="text.secondary" dir="rtl">
+              סה''כ מלונות: {total.toLocaleString('he-IL')}
+            </Typography>
+          </Box>
         </Box>
       </motion.div>
 
       <Card sx={{ mb: 2 }}>
         <CardContent sx={{ pb: '16px !important' }}>
           <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', alignItems: 'center' }}>
+            {(activeFiltersCount > 0 || searchInput) && (
+              <Button variant="text" color="error" startIcon={<ClearIcon />} onClick={clearFilters}>
+                נקה
+              </Button>
+            )}
+            <Button
+              variant={showFilters ? 'contained' : 'outlined'}
+              color={activeFiltersCount > 0 ? 'secondary' : 'primary'}
+              startIcon={<FilterListIcon />}
+              onClick={() => setShowFilters(p => !p)}
+            >
+              סינון {activeFiltersCount > 0 && `(${activeFiltersCount})`}
+            </Button>
             <TextField
               value={searchInput}
               onChange={e => setSearchInput(e.target.value)}
               placeholder="חפש לפי שם, רשת, עיר, ספק תוכן..."
               size="small"
+              dir="rtl"
               sx={{ flexGrow: 1, minWidth: 200 }}
               InputProps={{
                 startAdornment: <InputAdornment position="start"><SearchIcon color="action" /></InputAdornment>,
@@ -106,26 +120,13 @@ export default function HotelsListPage() {
                 ) : null,
               }}
             />
-            <Button
-              variant={showFilters ? 'contained' : 'outlined'}
-              color={activeFiltersCount > 0 ? 'secondary' : 'primary'}
-              startIcon={<FilterListIcon />}
-              onClick={() => setShowFilters(p => !p)}
-            >
-              סינון {activeFiltersCount > 0 && `(${activeFiltersCount})`}
-            </Button>
-            {(activeFiltersCount > 0 || searchInput) && (
-              <Button variant="text" color="error" startIcon={<ClearIcon />} onClick={clearFilters}>
-                נקה
-              </Button>
-            )}
           </Box>
 
           <Collapse in={showFilters} timeout={250}>
-            <Grid container spacing={2} sx={{ mt: 1.5 }}>
+            <Grid dir="rtl" container spacing={2} sx={{ mt: 1.5 }}>
               <Grid item xs={12} sm={6} md={3}>
                 <TextField
-                  select label="רשת מלונות" size="small" fullWidth
+                  select label="רשת מלונות" size="small" fullWidth sx={{ minWidth: 160 }}
                   value={filters.networkId ?? ''}
                   onChange={e => handleFilterChange('networkId', e.target.value)}
                 >
@@ -135,7 +136,7 @@ export default function HotelsListPage() {
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <TextField
-                  select label="מיקום" size="small" fullWidth
+                  select label="מיקום" size="small" fullWidth sx={{ minWidth: 160 }}
                   value={filters.location ?? ''}
                   onChange={e => handleFilterChange('location', e.target.value)}
                 >
@@ -145,7 +146,7 @@ export default function HotelsListPage() {
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <TextField
-                  select label="ספק תוכן" size="small" fullWidth
+                  select label="ספק תוכן" size="small" fullWidth sx={{ minWidth: 160 }}
                   value={filters.contentProvider ?? ''}
                   onChange={e => handleFilterChange('contentProvider', e.target.value)}
                 >
@@ -155,7 +156,7 @@ export default function HotelsListPage() {
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <TextField
-                  select label="סוג מכשיר" size="small" fullWidth
+                  select label="סוג מכשיר" size="small" fullWidth sx={{ minWidth: 160 }}
                   value={filters.deviceType ?? ''}
                   onChange={e => handleFilterChange('deviceType', e.target.value)}
                 >
@@ -171,16 +172,16 @@ export default function HotelsListPage() {
       {/* Table */}
       <Card>
         <TableContainer component={Paper} elevation={0}>
-          <Table>
+          <Table dir="rtl">
             <TableHead>
               <TableRow>
-                <TableCell align="right">שם המלון</TableCell>
-                <TableCell align="right">רשת</TableCell>
-                <TableCell align="right">מיקום</TableCell>
-                <TableCell align="right">ספק תוכן</TableCell>
-                <TableCell align="right">מכשיר</TableCell>
-                <TableCell align="right">רישוי</TableCell>
-                <TableCell align="right">פעולות</TableCell>
+                <TableCell align="left">שם המלון</TableCell>
+                <TableCell align="left">רשת</TableCell>
+                <TableCell align="left">מיקום</TableCell>
+                <TableCell align="left">ספק תוכן</TableCell>
+                <TableCell align="left">מכשיר</TableCell>
+                <TableCell align="left">רישוי</TableCell>
+                <TableCell align="left">פעולות</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -201,20 +202,20 @@ export default function HotelsListPage() {
               ) : (
                 hotels.map(hotel => (
                   <TableRow key={hotel.id} onClick={() => navigate(`/hotels/${hotel.id}`)}>
-                    <TableCell align="right">
-                      <Typography fontWeight={600}>{hotel.name}</Typography>
+                    <TableCell align="left">
+                      <Typography sx={{ fontWeight: 600 }}>{hotel.name}</Typography>
                     </TableCell>
-                    <TableCell align="right">{hotel.network?.name ?? '—'}</TableCell>
-                    <TableCell align="right">{hotel.location ?? '—'}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="left">{hotel.network?.name ?? '—'}</TableCell>
+                    <TableCell align="left">{hotel.location ?? '—'}</TableCell>
+                    <TableCell align="left">
                       {hotel.contentProvider ? <Chip label={hotel.contentProvider} size="small" variant="outlined" /> : '—'}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="left">
                       {hotel.deviceType ? <Chip label={hotel.deviceType} size="small" color="secondary" variant="outlined" /> : '—'}
                     </TableCell>
-                    <TableCell align="right">{hotel.activeSpareLicenses ?? '—'}</TableCell>
-                    <TableCell align="right" onClick={e => e.stopPropagation()}>
-                      <Box sx={{ display: 'flex', gap: 0.5, justifyContent: 'flex-end' }}>
+                    <TableCell align="left">{hotel.activeSpareLicenses ?? '—'}</TableCell>
+                    <TableCell align="left" onClick={e => e.stopPropagation()}>
+                      <Box sx={{ display: 'flex', gap: 0.5, justifyContent: 'flex-start' }}>
                         <Tooltip title="צפה">
                           <IconButton size="small" onClick={() => navigate(`/hotels/${hotel.id}`)}><VisibilityIcon fontSize="small" /></IconButton>
                         </Tooltip>

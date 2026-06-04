@@ -47,34 +47,34 @@ export default function UsersPage() {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Box>
-          <Typography variant="h5" fontWeight={700}>ניהול משתמשים</Typography>
-          <Typography variant="body2" color="text.secondary">{users.length} משתמשים רשומים</Typography>
-        </Box>
         <Button variant="contained" startIcon={<PersonAddIcon />} onClick={() => setCreateOpen(true)}>
           הוסף משתמש
         </Button>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+          <Typography variant="h5" fontWeight={700}>ניהול משתמשים</Typography>
+          <Typography variant="body2" color="text.secondary">{users.length} משתמשים רשומים</Typography>
+        </Box>
       </Box>
 
       <Card>
         <TableContainer component={Paper} elevation={0}>
-          <Table>
+          <Table dir="rtl">
             <TableHead>
               <TableRow>
-                <TableCell align="right">שם משתמש</TableCell>
-                <TableCell align="right">אימייל</TableCell>
-                <TableCell align="right">תפקיד</TableCell>
-                <TableCell align="right">סטטוס</TableCell>
-                <TableCell align="right">נוצר בתאריך</TableCell>
-                <TableCell align="right">פעולות</TableCell>
+                <TableCell align="left">שם משתמש</TableCell>
+                <TableCell align="left">אימייל</TableCell>
+                <TableCell align="left">תפקיד</TableCell>
+                <TableCell align="left">סטטוס</TableCell>
+                <TableCell align="left">נוצר בתאריך</TableCell>
+                <TableCell align="left">פעולות</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {users.map(user => (
                 <TableRow key={user.id}>
-                  <TableCell align="right"><Typography fontWeight={600}>{user.username}</Typography></TableCell>
-                  <TableCell align="right">{user.email}</TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left"><Typography fontWeight={600}>{user.username}</Typography></TableCell>
+                  <TableCell align="left">{user.email}</TableCell>
+                  <TableCell align="left">
                     <FormControl size="small">
                       <Select
                         value={user.role}
@@ -87,7 +87,7 @@ export default function UsersPage() {
                       </Select>
                     </FormControl>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left">
                     <Chip
                       label={user.isActive ? 'פעיל' : 'מושבת'}
                       color={user.isActive ? 'success' : 'default'}
@@ -95,10 +95,10 @@ export default function UsersPage() {
                       icon={user.isActive ? <CheckCircleIcon /> : <BlockIcon />}
                     />
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left">
                     <Typography variant="body2">{new Date(user.createdAt).toLocaleDateString('he-IL')}</Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left">
                     {user.isActive && (
                       <Tooltip title="השבת משתמש">
                         <IconButton size="small" color="error" onClick={() => setDisableTarget({ id: user.id, username: user.username })}>

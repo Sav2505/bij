@@ -85,9 +85,10 @@ export default function Header({ onMenuClick }: HeaderProps) {
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
                 filter: 'drop-shadow(0 1px 2px rgba(29,78,216,0.18))',
+                
               }}
             >
-              מערכת ניהול מלונות
+              IPTV מערכת ניהול תיקי אתר
             </Typography>
             <Typography
               sx={{
