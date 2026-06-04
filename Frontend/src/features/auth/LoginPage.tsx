@@ -172,6 +172,7 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 error={!!errors.password}
                 helperText={errors.password?.message}
+                //@ts-ignore
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
