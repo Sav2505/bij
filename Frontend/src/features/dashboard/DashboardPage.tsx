@@ -55,7 +55,6 @@ function StatCard({ title, value, icon, color, delay }: StatCardProps) {
       >
         <CardContent sx={{ p: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-            {/* Text – RIGHT (first child = right in RTL) */}
             <Box
               sx={{
                 background: `linear-gradient(135deg, ${color} 0%, ${color}CC 100%)`,
@@ -66,7 +65,7 @@ function StatCard({ title, value, icon, color, delay }: StatCardProps) {
               {icon}
             </Box>
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", minWidth: 0 }}>
-              <Typography variant="body2" sx={{ mb: 1 }}>
+              <Typography variant="body2" sx={{ mb: 1, fontSize: '0.94rem', }}>
                 {title}
               </Typography>
               <Typography variant="h4">
@@ -142,7 +141,7 @@ function RecentUpdateRow({ hotel, isLast, onNavigate }: RecentUpdateRowProps) {
         <Typography
           variant="body2"
           noWrap
-          sx={{ color: 'text.primary', lineHeight: 1.6, fontWeight: 700, fontSize: '1rem', }}
+          sx={{ color: 'text.primary', lineHeight: 1.6, fontWeight: 700, fontSize: '1.15rem', }}
         >
           {hotel.name}
         </Typography>
@@ -168,7 +167,7 @@ function RecentUpdatesCard({ isLoading, updates, onNavigate }: RecentUpdatesCard
         <CardContent sx={{ p: 0 }}>
           <Box sx={{ px: 3, py: 2.5, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', gap: 1.5 }}>
             <UpdateIcon color="primary" />
-            <Typography variant="h6" sx={{ fontWeight: "600" }}>עדכונים אחרונים</Typography>
+            <Typography variant="h6" sx={{ fontWeight: "700", fontSize: "1.2rem" }}>עדכונים אחרונים</Typography>
           </Box>
           <Divider />
 

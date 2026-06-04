@@ -1,22 +1,12 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, IconButton, Typography, Box, Button, Tooltip, Avatar, Divider } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { AppBar, Toolbar, IconButton, Typography, Box, Avatar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { logout } from '../../features/auth/authSlice';
 import type { RootState } from '../../redux/store';
 
 interface HeaderProps { onMenuClick: () => void; }
 
 export default function Header({ onMenuClick }: HeaderProps) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const user = useSelector((s: RootState) => s.auth.user);
-
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
 
   return (
     <AppBar
@@ -26,12 +16,14 @@ export default function Header({ onMenuClick }: HeaderProps) {
         bgcolor: 'rgba(255,255,255,0.92)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(226,232,240,0.8)',
+        justifyContent: 'center',
         color: 'text.primary',
+        borderBottom: "1px solid rgba(0, 0, 0, 0.09)",
         zIndex: (theme) => theme.zIndex.drawer - 1,
         right: { md: '260px' },
         left: 0,
         width: { md: 'calc(100% - 260px)' },
+        height: { xs: 60, md: 70 },
       }}
     >
       <Toolbar sx={{ justifyContent: 'space-between', minHeight: { xs: 60, md: 64 }, px: { xs: 2, md: 3 } }}>
@@ -44,60 +36,73 @@ export default function Header({ onMenuClick }: HeaderProps) {
           <MenuIcon />
         </IconButton>
 
-        {/* Title */}
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1 }}>
-          <Typography
-            variant="h6"
-            fontWeight={700}
-            color="primary.main"
-          >
-            מערכת ניהול מלונות VIGGO
-          </Typography>
-        </Box>
-
         {/* User section */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 1.5 }}>
-            <Box sx={{ textAlign: 'right' }}>
-              <Typography variant="body2" fontWeight={600} color="text.primary" lineHeight={1.2}>
-                {user?.username}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {user?.role === 'ADMIN' ? 'מנהל מערכת' : 'משתמש'}
-              </Typography>
-            </Box>
             <Avatar
               sx={{
                 width: 36, height: 36,
                 bgcolor: '#0D2B4E',
-                fontSize: '0.9rem',
+                fontSize: '1rem',
                 fontWeight: 700,
               }}
             >
               {user?.username?.[0]?.toUpperCase()}
             </Avatar>
-            <Divider orientation="vertical" flexItem sx={{ mx: 0.5, my: 1 }} />
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: 'right' }}>
+              <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary', lineHeight: 1.2, fontSize: '0.96rem' }} noWrap>
+                {user?.username}
+              </Typography>
+              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                {user?.role === 'ADMIN' ? 'מנהל מערכת' : 'משתמש'}
+              </Typography>
+            </Box>
           </Box>
+        </Box>
 
-          <Tooltip title="יציאה מהמערכת">
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              startIcon={<LogoutIcon fontSize="small" />}
-              onClick={handleLogout}
+        {/* Title */}
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
+          <Box
+            sx={{
+              width: 3.5,
+              height: 42,
+              borderRadius: '6px',
+              background: 'linear-gradient(180deg, #3B82F6 0%, #1D4ED8 100%)',
+              boxShadow: '0 2px 8px rgba(59,130,246,0.5)',
+              flexShrink: 0,
+            }}
+          />
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: 'right' }}>
+            <Typography
+              variant="h6"
               sx={{
-                borderRadius: '10px',
-                borderWidth: '1.5px',
-                py: 0.7,
-                px: 1.5,
-                fontSize: '0.82rem',
-                '&:hover': { borderWidth: '1.5px', bgcolor: 'rgba(239,68,68,0.05)' },
+                fontWeight: 800,
+                fontSize: '1.4rem',
+                lineHeight: 1.6,
+                letterSpacing: '0.02em',
+                background: 'linear-gradient(135deg, #0D2B4E 0%, #1D4ED8 60%, #3B82F6 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                filter: 'drop-shadow(0 1px 2px rgba(29,78,216,0.18))',
               }}
             >
-              <Box sx={{ display: { xs: 'none', sm: 'block' } }}>יציאה</Box>
-            </Button>
-          </Tooltip>
+              מערכת ניהול מלונות
+            </Typography>
+            <Typography
+              sx={{
+                fontWeight: 900,
+                fontSize: '0.93rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#3B82F6',
+                lineHeight: 1.1,
+                textShadow: '0 0 12px rgba(59,130,246,0.4)',
+              }}
+            >
+              B-Zone
+            </Typography>
+          </Box>
         </Box>
       </Toolbar>
     </AppBar>

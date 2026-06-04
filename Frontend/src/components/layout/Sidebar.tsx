@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../features/auth/authSlice';
 import {
   Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText,
   Typography, Avatar, Chip, alpha,
@@ -8,6 +9,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import HotelIcon from '@mui/icons-material/Hotel';
 import PeopleIcon from '@mui/icons-material/People';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import LogoutIcon from '@mui/icons-material/Logout';
 import type { RootState } from '../../redux/store';
 
 interface SidebarProps {
@@ -73,8 +75,14 @@ function NavItem({ item, active, onClick }: { item: { label: string; icon: React
 function SidebarContent({ drawerWidth }: { drawerWidth: number }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector((s: RootState) => s.auth.user);
   const isAdmin = user?.role === 'ADMIN';
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
 
   return (
     <Box sx={{ width: drawerWidth, height: '100%', display: 'flex', flexDirection: 'column', bgcolor: SIDEBAR_BG }}>
@@ -104,7 +112,7 @@ function SidebarContent({ drawerWidth }: { drawerWidth: number }) {
                 letterSpacing: '-0.01em',
               }}
             >
-              VIGGO Hotels
+              B-Zone
             </Typography>
             <Typography sx={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem', fontWeight: 400 }}>
               מערכת ניהול
@@ -198,13 +206,43 @@ function SidebarContent({ drawerWidth }: { drawerWidth: number }) {
             </List>
           </>
         )}
+
+        <Box sx={{ mx: 1.5, my: 2, height: '1px', bgcolor: DIVIDER_COLOR }} />
+        <Typography sx={{ px: 1.5, pb: 1, color: 'rgba(255,255,255,0.3)', fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+          חשבון
+        </Typography>
+        <List disablePadding>
+          <ListItemButton
+            onClick={handleLogout}
+            sx={{
+              borderRadius: '10px',
+              mb: 0.5,
+              px: 2,
+              py: 1.1,
+              color: '#F87171',
+              '&:hover': {
+                backgroundColor: 'rgba(239,68,68,0.1)',
+                color: '#EF4444',
+              },
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: 34, color: 'inherit' }}>
+              <LogoutIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText
+              primary="התנתק"
+              slotProps={{ primary: { style: { fontSize: '0.92rem', fontWeight: 500 } } }}
+            />
+          </ListItemButton>
+        </List>
       </Box>
 
       {/* Footer */}
       <Box sx={{ p: 2.5 }}>
         <Box sx={{ height: '1px', bgcolor: DIVIDER_COLOR, mb: 2 }} />
         <Typography sx={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.72rem', textAlign: 'center' }}>
-          גרסה 1.0.0 • VIGGO Hotels
+          גרסה 1.0.0 • B-Zone
         </Typography>
       </Box>
     </Box>

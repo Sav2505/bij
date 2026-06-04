@@ -127,7 +127,7 @@ export default function LoginPage() {
                 <HotelIcon sx={{ fontSize: 38, color: 'white' }} />
               </Box>
             </Box>
-            <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>VIGGO Hotels</Typography>
+            <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>B-Zone</Typography>
             <Typography variant="body2" sx={{ opacity: 0.7, mt: 0.5, fontWeight: 400 }}>מערכת ניהול מלונות</Typography>
           </Box>
 
