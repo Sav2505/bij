@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import {
-  Box, Card, CardContent, Typography, Button, LinearProgress,
+  Box, Card, CardContent, Typography, LinearProgress,
   Alert, List, ListItem, ListItemText, Chip, Paper, Grid,
 } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -66,12 +66,14 @@ export default function ImportPage() {
   };
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'end', py: 4 }}>
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-        <Typography variant="h5" fontWeight={700} mb={0.5}>ייבוא נתונים מ-Excel</Typography>
-        <Typography variant="body2" color="text.secondary" mb={3}>
-          ייבא נתוני מלונות מקובץ Excel בפורמט הסטנדרטי של VIGGO
-        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', mb: 3 }}>
+          <Typography dir="rtl" variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>ייבוא נתונים מ-Excel</Typography>
+          <Typography dir="rtl" variant="body2" color="text.secondary">
+            ייבא נתוני תיקי אתר מקובץ Excel
+          </Typography>
+        </Box>
       </motion.div>
 
       <Grid container spacing={3} component="div">
@@ -97,16 +99,13 @@ export default function ImportPage() {
             }}
           >
             <UploadFileIcon sx={{ fontSize: 56, color: 'text.secondary', mb: 2, opacity: 0.6 }} />
-            <Typography variant="h6" fontWeight={600} mb={1}>
+            <Typography dir="rtl" variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
               גרור ושחרר קובץ Excel כאן
             </Typography>
-            <Typography variant="body2" color="text.secondary" mb={2.5}>
+            <Typography dir="rtl" variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
               או לחץ לבחירת קובץ
             </Typography>
-            <Button variant="outlined" component="span" startIcon={<UploadFileIcon />}>
-              בחר קובץ
-            </Button>
-            <Typography variant="caption" display="block" color="text.secondary" mt={1.5}>
+            <Typography dir="rtl" variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1.5 }}>
               פורמטים נתמכים: .xlsx | גודל מקסימלי: 10MB
             </Typography>
             <input
@@ -121,7 +120,7 @@ export default function ImportPage() {
           {isUploading && (
             <Card sx={{ mb: 3 }}>
               <CardContent>
-                <Typography variant="body1" fontWeight={500} mb={1.5}>מעבד קובץ...</Typography>
+                <Typography dir="rtl" variant="body1" sx={{ fontWeight: 500, mb: 1.5, textAlign: 'right' }}>מעבד קובץ...</Typography>
                 <LinearProgress />
               </CardContent>
             </Card>
@@ -131,8 +130,8 @@ export default function ImportPage() {
             <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
               <Card>
                 <CardContent>
-                  <Typography variant="h6" fontWeight={600} mb={2}>תוצאות הייבוא</Typography>
-                  <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+                  <Typography dir="rtl" variant="h6" sx={{ fontWeight: 600, mb: 2, textAlign: 'right' }}>תוצאות הייבוא</Typography>
+                  <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                     <Chip label={`סה״כ שורות: ${result.totalRows}`} variant="outlined" />
                     <Chip icon={<CheckCircleIcon />} label={`הצליח: ${result.successRows}`} color="success" />
                     {result.errorRows > 0 && (
@@ -155,13 +154,16 @@ export default function ImportPage() {
                             <ListItemText
                               primary={`שורה ${e.index}`}
                               secondary={e.error}
-                              slotProps={{ primary: { style: { fontWeight: 500 } } }}
+                              slotProps={{
+                                primary: { style: { fontWeight: 500, textAlign: 'right' } },
+                                secondary: { style: { textAlign: 'right' } },
+                              }}
                             />
                           </ListItem>
                         ))}
                         {result.errors.length > 10 && (
                           <ListItem>
-                            <ListItemText secondary={`... ועוד ${result.errors.length - 10} שגיאות`} />
+                            <ListItemText secondary={`... ועוד ${result.errors.length - 10} שגיאות`} slotProps={{ secondary: { style: { textAlign: 'right' } } }} />
                           </ListItem>
                         )}
                       </List>
