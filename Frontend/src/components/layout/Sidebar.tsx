@@ -242,7 +242,7 @@ function SidebarContent({ drawerWidth }: { drawerWidth: number }) {
       <Box sx={{ p: 2.5 }}>
         <Box sx={{ height: '1px', bgcolor: DIVIDER_COLOR, mb: 2 }} />
         <Typography sx={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.72rem', textAlign: 'center' }}>
-          גרסה 1.0.0 • B-Zone
+          גרסה {import.meta.env.VITE_VERSION} • B-Zone
         </Typography>
       </Box>
     </Box>
