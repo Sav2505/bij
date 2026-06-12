@@ -2,6 +2,7 @@ import './config/env'; // validate env first (also loads dotenv)
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import { logger } from './config/logger';
 import { errorMiddleware } from './middleware/error.middleware';
@@ -15,10 +16,12 @@ const app = express();
 // Security
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 }));
+app.use(cookieParser());
 
 // Rate limiting
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 300, message: 'יותר מדי בקשות, נסה שוב מאוחר יותר' });

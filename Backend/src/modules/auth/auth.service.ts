@@ -1,8 +1,10 @@
 import { prisma } from '../../config/database';
 import { comparePassword, hashPassword } from '../../utils/password.util';
-import { signToken } from '../../utils/jwt.util';
+import { signToken, signRefreshToken, verifyRefreshToken } from '../../utils/jwt.util';
 import { AppError } from '../../middleware/error.middleware';
 import { LoginDto, CreateUserDto } from './auth.dto';
+
+const REFRESH_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 export const login = async (dto: LoginDto) => {
   const user = await prisma.user.findFirst({
@@ -18,10 +20,20 @@ export const login = async (dto: LoginDto) => {
     data: { userId: user.id, action: 'LOGIN', entityType: 'User', entityId: user.id },
   });
 
-  const token = signToken({ userId: user.id, role: user.role });
+  const accessToken = signToken({ userId: user.id, role: user.role });
+  const refreshToken = signRefreshToken({ userId: user.id });
+
+  await prisma.refreshToken.create({
+    data: {
+      token: refreshToken,
+      userId: user.id,
+      expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_MS),
+    },
+  });
 
   return {
-    token,
+    accessToken,
+    refreshToken,
     user: {
       id: user.id,
       username: user.username,
@@ -32,6 +44,52 @@ export const login = async (dto: LoginDto) => {
       updatedAt: user.updatedAt.toISOString(),
     },
   };
+};
+
+export const refreshAccessToken = async (refreshToken: string) => {
+  // Verify JWT signature first
+  let userId: string;
+  try {
+    const payload = verifyRefreshToken(refreshToken);
+    userId = payload.userId;
+  } catch {
+    throw new AppError('טוקן רענון לא תקין – יש להתחבר מחדש', 401);
+  }
+
+  // Check DB: must exist, not revoked, not expired
+  const stored = await prisma.refreshToken.findUnique({ where: { token: refreshToken } });
+  if (!stored || stored.isRevoked || stored.expiresAt < new Date()) {
+    throw new AppError('טוקן רענון פג תוקף – יש להתחבר מחדש', 401);
+  }
+
+  // Ensure user still active
+  const user = await prisma.user.findUnique({
+    where: { id: userId, isActive: true },
+    select: { id: true, role: true },
+  });
+  if (!user) throw new AppError('משתמש לא נמצא או לא פעיל', 401);
+
+  // Rotate: revoke old token, issue new one
+  await prisma.refreshToken.update({ where: { token: refreshToken }, data: { isRevoked: true } });
+
+  const newRefreshToken = signRefreshToken({ userId: user.id });
+  await prisma.refreshToken.create({
+    data: {
+      token: newRefreshToken,
+      userId: user.id,
+      expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_MS),
+    },
+  });
+
+  const accessToken = signToken({ userId: user.id, role: user.role });
+  return { accessToken, newRefreshToken };
+};
+
+export const revokeRefreshToken = async (refreshToken: string) => {
+  await prisma.refreshToken.updateMany({
+    where: { token: refreshToken, isRevoked: false },
+    data: { isRevoked: true },
+  });
 };
 
 export const createUser = async (dto: CreateUserDto, requesterId?: string) => {

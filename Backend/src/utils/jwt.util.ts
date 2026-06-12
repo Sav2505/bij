@@ -6,10 +6,22 @@ export interface JwtPayload {
   role: string;
 }
 
+export interface RefreshTokenPayload {
+  userId: string;
+}
+
 export const signToken = (payload: JwtPayload): string => {
   return jwt.sign(payload, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'] });
 };
 
 export const verifyToken = (token: string): JwtPayload => {
   return jwt.verify(token, env.JWT_SECRET) as JwtPayload;
+};
+
+export const signRefreshToken = (payload: RefreshTokenPayload): string => {
+  return jwt.sign(payload, env.REFRESH_TOKEN_SECRET, { expiresIn: env.REFRESH_TOKEN_EXPIRES_IN as jwt.SignOptions['expiresIn'] });
+};
+
+export const verifyRefreshToken = (token: string): RefreshTokenPayload => {
+  return jwt.verify(token, env.REFRESH_TOKEN_SECRET) as RefreshTokenPayload;
 };
