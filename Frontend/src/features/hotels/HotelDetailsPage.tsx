@@ -130,7 +130,7 @@ export default function HotelDetailsPage() {
           <Grid size={{ xs: 12, md: 6 }}>
             <Card>
               <CardContent>
-                <Typography variant="h6" fontWeight={600} mb={2} color="primary">מידע כללי</Typography>
+                <Typography variant="h6" sx={{ marginBottom: 2, fontWeight: 600 }} color="primary">מידע כללי</Typography>
                 <InfoRow label="שם המלון" value={hotel.name} />
                 <InfoRow label="רשת מלונות" value={hotel.network?.name} />
                 <InfoRow label="מיקום" value={hotel.location} />

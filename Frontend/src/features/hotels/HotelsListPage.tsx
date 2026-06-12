@@ -35,6 +35,7 @@ export default function HotelsListPage() {
   const [searchInput, setSearchInput] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState<(typeof hotels)[number] | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
 
   const debouncedSearch = useDebounce(searchInput, 400);
@@ -222,7 +223,7 @@ export default function HotelsListPage() {
                         {isAdmin && (
                           <>
                             <Tooltip title="ערוך">
-                              <IconButton size="small" color="primary"><EditIcon fontSize="small" /></IconButton>
+                              <IconButton size="small" color="primary" onClick={() => setEditTarget(hotel)}><EditIcon fontSize="small" /></IconButton>
                             </Tooltip>
                             <Tooltip title="מחק">
                               <IconButton size="small" color="error" onClick={() => setDeleteTarget({ id: hotel.id, name: hotel.name })}>
@@ -254,6 +255,7 @@ export default function HotelsListPage() {
       </Card>
 
       <HotelForm open={formOpen} onClose={() => setFormOpen(false)} />
+      <HotelForm open={!!editTarget} onClose={() => setEditTarget(null)} hotel={editTarget ?? undefined} />
 
       <ConfirmDialog
         open={!!deleteTarget}
