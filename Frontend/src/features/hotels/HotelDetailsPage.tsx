@@ -36,7 +36,7 @@ function InfoRow({ label, value }: { label: string; value?: string | number | nu
   return (
     <Box sx={{ display: 'flex', gap: 1, py: 0.75, borderBottom: '1px solid', borderColor: 'divider', '&:last-child': { border: 0 } }}>
       <Typography variant="body2" color="text.secondary" sx={{ minWidth: 160, flexShrink: 0 }}>{label}</Typography>
-      <Typography variant="body2" fontWeight={500}>{value}</Typography>
+      <Typography variant="body2" sx={{ fontWeight: 500 }}>{value}</Typography>
     </Box>
   );
 }
@@ -49,18 +49,22 @@ function ContactCard({ contact }: { contact: Contact }) {
           {categoryIcon[contact.category]}
         </Avatar>
         <Box>
-          <Typography fontWeight={600}>{contact.name || '—'}</Typography>
+          <Typography sx={{ fontWeight: 600 }}>{contact.name || '—'}</Typography>
           <Chip label={categoryLabel[contact.category]} size="small" color="primary" variant="outlined" sx={{ height: 18, fontSize: '0.7rem' }} />
         </Box>
       </Box>
-      {contact.role && <Typography variant="body2" color="text.secondary" mb={0.5}>{contact.role}</Typography>}
+      {contact.role && <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>{contact.role}</Typography>}
       {contact.phone && (
-        <Typography variant="body2">
-          📞{' '}
-          <a href={`tel:${contact.phone.replace(/\s/g, '')}`} style={{ color: 'inherit', textDecoration: 'none', fontWeight: 500 }}>
-            {contact.phone}
-          </a>
-        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75, mt: 0.5 }}>
+          {contact.phone.split(',').map((p, i) => (
+            <Typography key={i} variant="body2">
+              📞{' '}
+              <a href={`tel:${p.trim().replace(/\s/g, '')}`} style={{ color: 'inherit', textDecoration: 'none', fontWeight: 500 }}>
+                {p.trim()}
+              </a>
+            </Typography>
+          ))}
+        </Box>
       )}
       {contact.email && (
         <Typography variant="body2">
@@ -86,7 +90,7 @@ export default function HotelDetailsPage() {
 
   if (isLoading) {
     return (
-      <Box>
+      <Box dir="rtl">
         <Skeleton height={48} width={200} sx={{ mb: 3 }} />
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 8 }}><Skeleton variant="rectangular" height={400} sx={{ borderRadius: 3 }} /></Grid>
@@ -99,7 +103,7 @@ export default function HotelDetailsPage() {
   if (!hotel) return null;
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }} dir="rtl">
       {/* Top bar */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3, flexWrap: 'wrap', gap: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -107,14 +111,14 @@ export default function HotelDetailsPage() {
             <ArrowForwardIcon />
           </IconButton>
           <Box>
-            <Typography variant="h5" fontWeight={700}>{hotel.name}</Typography>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>{hotel.name}</Typography>
             <Typography variant="body2" color="text.secondary">
               {hotel.network?.name ?? ''} {hotel.location ? `· ${hotel.location}` : ''}
             </Typography>
           </Box>
         </Box>
         {isAdmin && (
-          <Button variant="outlined" startIcon={<EditIcon />} onClick={() => setEditOpen(true)}>
+          <Button dir="ltr" variant="outlined" startIcon={<EditIcon />} onClick={() => setEditOpen(true)}>
             עריכה
           </Button>
         )}
@@ -140,7 +144,7 @@ export default function HotelDetailsPage() {
                 <InfoRow label="מספר חדרים" value={hotel.roomCount} />
                 {hotel.remarks && (
                   <Box sx={{ mt: 1.5, pt: 1.5, borderTop: '1px solid', borderColor: 'divider' }}>
-                    <Typography variant="body2" color="text.secondary" mb={0.5}>הערות</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>הערות</Typography>
                     <Typography variant="body2">{hotel.remarks}</Typography>
                   </Box>
                 )}
@@ -151,7 +155,7 @@ export default function HotelDetailsPage() {
           <Grid size={{ xs: 12, md: 6 }}>
             <Card>
               <CardContent>
-                <Typography variant="h6" fontWeight={600} mb={2} color="primary">פרטים טכניים</Typography>
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }} color="primary">פרטים טכניים</Typography>
                 <InfoRow label="קוד רישום VIGGO" value={hotel.viggoRegistrationCode} />
                 <InfoRow label="קוד טכנאי" value={hotel.technicianCode} />
                 <InfoRow label="שירות ותמיכה" value={hotel.serviceSupport} />
@@ -164,13 +168,13 @@ export default function HotelDetailsPage() {
 
             <Card sx={{ mt: 2 }}>
               <CardContent>
-                <Typography variant="h6" fontWeight={600} mb={2} color="primary">רישוי</Typography>
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }} color="primary">רישוי</Typography>
                 <InfoRow label="רישוי פעיל + ספייר" value={hotel.activeSpareLicenses} />
                 <InfoRow label="רישוי HOT" value={hotel.hotLicenseCount} />
                 {hotel.hotLicenseNotes && <InfoRow label="הערות רישוי HOT" value={hotel.hotLicenseNotes} />}
                 {hotel.notes && (
                   <Box sx={{ mt: 1.5, pt: 1.5, borderTop: '1px solid', borderColor: 'divider' }}>
-                    <Typography variant="body2" color="text.secondary" mb={0.5}>הערות</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>הערות</Typography>
                     <Typography variant="body2">{hotel.notes}</Typography>
                   </Box>
                 )}
