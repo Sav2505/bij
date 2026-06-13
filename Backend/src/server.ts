@@ -17,8 +17,19 @@ const app = express();
 
 // Security
 app.use(helmet());
+
+const isProd = process.env.IS_PROD === 'true';
+const ALLOWED_ORIGINS = [
+  ...(process.env.CORS_ORIGIN ? [process.env.CORS_ORIGIN] : []),
+  ...(!isProd ? ['http://localhost:5173'] : []),
+];
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. curl, Postman, server-to-server)
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
   credentials: true,

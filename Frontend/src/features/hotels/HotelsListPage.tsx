@@ -250,7 +250,7 @@ export default function HotelsListPage() {
           onRowsPerPageChange={e => setFilters(f => ({ ...f, pageSize: parseInt(e.target.value), page: 1 }))}
           labelRowsPerPage="שורות לדף:"
           labelDisplayedRows={({ from, to, count }) => `${from}-${to} מתוך ${count}`}
-          sx={{ direction: 'rtl' }}
+          sx={{ direction: 'ltr', justifyContent: "start", display: "flex" }}
         />
       </Card>
 
