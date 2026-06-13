@@ -7,6 +7,7 @@ import rateLimit from 'express-rate-limit';
 import { logger } from './config/logger';
 import { prisma } from './config/database';
 import { errorMiddleware } from './middleware/error.middleware';
+import { apiKeyMiddleware } from './middleware/api-key.middleware';
 import authRoutes from './modules/auth/auth.routes';
 import hotelsRoutes from './modules/hotels/hotels.routes';
 import usersRoutes from './modules/users/users.routes';
@@ -31,6 +32,9 @@ app.use(limiter);
 // Body parsing
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// API key protection — must come before all routes
+app.use(apiKeyMiddleware);
 
 // Request logging
 app.use((req, _res, next) => {

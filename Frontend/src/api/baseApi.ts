@@ -10,6 +10,8 @@ const rawBaseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as unknown as RootState).auth.token;
     if (token) headers.set('Authorization', `Bearer ${token}`);
+    const apiKey = import.meta.env.VITE_API_KEY;
+    if (apiKey) headers.set('X-API-Key', apiKey);
     return headers;
   },
 });
