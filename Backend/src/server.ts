@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import { logger } from './config/logger';
+import { prisma } from './config/database';
 import { errorMiddleware } from './middleware/error.middleware';
 import authRoutes from './modules/auth/auth.routes';
 import hotelsRoutes from './modules/hotels/hotels.routes';
@@ -48,6 +49,17 @@ app.get('/health', (_req, res) => { res.json({ status: 'ok', timestamp: new Date
 
 // Error handler (must be last)
 app.use(errorMiddleware);
+
+// Keep-alive: מונע שינה של Supabase ו-Render כל 10 דקות
+const PING_INTERVAL_MS = 10 * 60 * 1000;
+setInterval(async () => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    logger.debug('[keep-alive] DB ping OK');
+  } catch (err) {
+    logger.warn('[keep-alive] DB ping failed:', err);
+  }
+}, PING_INTERVAL_MS);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

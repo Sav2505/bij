@@ -3,7 +3,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 import 'dotenv/config';
 
-const isRemote = process.env.DATABASE_URL?.includes('render.com');
+const isRemote = process.env.DATABASE_URL?.includes('render.com') || process.env.DATABASE_URL?.includes('supabase.co');
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL!,
   ssl: isRemote ? { rejectUnauthorized: false } : false,
