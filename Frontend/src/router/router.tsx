@@ -35,9 +35,11 @@ export const router = createBrowserRouter([
           { index: true, element: <Navigate to="/admin/users" replace /> },
           { path: 'users', element: wrap(<UsersPage />) },
           { path: 'import', element: wrap(<ImportPage />) },
+          { path: '*', element: <Navigate to="/admin/users" replace /> },
         ],
       },
+      { path: '*', element: <Navigate to="/dashboard" replace /> },
     ],
   },
-  { path: '*', element: <Navigate to="/" replace /> },
+  { path: '*', element: <Navigate to="/dashboard" replace /> },
 ]);
