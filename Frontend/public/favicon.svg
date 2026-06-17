@@ -9,9 +9,6 @@
   <!-- Rounded background -->
   <rect width="100" height="100" rx="22" fill="url(#bg)"/>
 
-  <!-- Top accent line -->
-  <rect x="0" y="0" width="100" height="4.5" rx="22 22 0 0" fill="#3B82F6" opacity="0.95"/>
-
   <!-- ── Headboard (tall, prominent) ── -->
   <rect x="10" y="12" width="80" height="26" rx="6"
     fill="rgba(255,255,255,0.22)" stroke="rgba(255,255,255,0.72)" stroke-width="2"/>
