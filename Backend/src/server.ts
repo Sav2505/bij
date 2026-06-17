@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
+import path from 'path';
 import { logger } from './config/logger';
 import { prisma } from './config/database';
 import { errorMiddleware } from './middleware/error.middleware';
@@ -61,6 +62,15 @@ app.use('/api/import', importRoutes);
 
 // Health check
 app.get('/health', (_req, res) => { res.json({ status: 'ok', timestamp: new Date().toISOString() }); });
+
+// Serve built frontend in production + SPA catch-all
+if (isProd) {
+  const distPath = path.resolve(__dirname, '../../Frontend/dist');
+  app.use(express.static(distPath));
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
 
 // Error handler (must be last)
 app.use(errorMiddleware);
