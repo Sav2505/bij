@@ -4,10 +4,6 @@
       <stop offset="0%" stop-color="#0D2B4E"/>
       <stop offset="100%" stop-color="#3B82F6"/>
     </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#93C5FD" stop-opacity="0.85"/>
-    </linearGradient>
   </defs>
 
   <!-- Rounded background -->
@@ -16,28 +12,39 @@
   <!-- Top accent line -->
   <rect x="0" y="0" width="100" height="4.5" rx="22 22 0 0" fill="#3B82F6" opacity="0.95"/>
 
-  <!-- ── Headboard ── -->
-  <rect x="14" y="18" width="72" height="18" rx="5" fill="url(#accent)" opacity="0.30"/>
-  <rect x="14" y="18" width="72" height="18" rx="5" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="2"/>
+  <!-- ── Headboard (tall, prominent) ── -->
+  <rect x="10" y="12" width="80" height="26" rx="6"
+    fill="rgba(255,255,255,0.22)" stroke="rgba(255,255,255,0.72)" stroke-width="2"/>
+  <!-- Inner headboard panel detail -->
+  <rect x="18" y="17" width="64" height="16" rx="4"
+    fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
 
-  <!-- ── Bed frame / base ── -->
-  <rect x="11" y="62" width="78" height="12" rx="4" fill="rgba(255,255,255,0.22)" stroke="rgba(255,255,255,0.55)" stroke-width="1.8"/>
-
-  <!-- ── Mattress ── -->
-  <rect x="14" y="38" width="72" height="25" rx="4" fill="rgba(255,255,255,0.32)" stroke="rgba(255,255,255,0.70)" stroke-width="1.8"/>
+  <!-- ── Mattress / bed body ── -->
+  <rect x="10" y="38" width="80" height="36" rx="4"
+    fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.52)" stroke-width="1.8"/>
 
   <!-- ── Left pillow ── -->
-  <rect x="18" y="41" width="26" height="13" rx="3.5" fill="white" opacity="0.88"/>
-  <!-- pillow detail -->
-  <rect x="29" y="46" width="3" height="4" rx="1.5" fill="#3B82F6" opacity="0.55"/>
+  <rect x="14" y="41" width="32" height="18" rx="4" fill="white" opacity="0.90"/>
+  <!-- pillow center seam -->
+  <line x1="30" y1="44" x2="30" y2="56"
+    stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" opacity="0.50"/>
 
   <!-- ── Right pillow ── -->
-  <rect x="56" y="41" width="26" height="13" rx="3.5" fill="white" opacity="0.88"/>
-  <!-- pillow detail -->
-  <rect x="67" y="46" width="3" height="4" rx="1.5" fill="#3B82F6" opacity="0.55"/>
+  <rect x="54" y="41" width="32" height="18" rx="4" fill="white" opacity="0.90"/>
+  <!-- pillow center seam -->
+  <line x1="70" y1="44" x2="70" y2="56"
+    stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" opacity="0.50"/>
+
+  <!-- ── Blanket fold line ── -->
+  <line x1="10" y1="61" x2="90" y2="61"
+    stroke="rgba(255,255,255,0.50)" stroke-width="1.8"/>
+
+  <!-- ── Bed base ── -->
+  <rect x="10" y="73" width="80" height="9" rx="3"
+    fill="rgba(255,255,255,0.20)" stroke="rgba(255,255,255,0.48)" stroke-width="1.6"/>
 
   <!-- ── Left leg ── -->
-  <rect x="16" y="73" width="9" height="10" rx="2.5" fill="rgba(255,255,255,0.42)"/>
+  <rect x="15" y="81" width="9" height="10" rx="2.5" fill="rgba(255,255,255,0.38)"/>
   <!-- ── Right leg ── -->
-  <rect x="75" y="73" width="9" height="10" rx="2.5" fill="rgba(255,255,255,0.42)"/>
+  <rect x="76" y="81" width="9" height="10" rx="2.5" fill="rgba(255,255,255,0.38)"/>
 </svg>
