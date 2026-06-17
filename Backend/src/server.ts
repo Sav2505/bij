@@ -45,14 +45,14 @@ app.use(limiter);
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// API key protection — must come before all routes
-app.use(apiKeyMiddleware);
-
 // Request logging
 app.use((req, _res, next) => {
   logger.debug(`${req.method} ${req.path}`);
   next();
 });
+
+// API key protection — scoped to /api only so the frontend SPA routes are not blocked
+app.use('/api', apiKeyMiddleware);
 
 // Routes
 app.use('/api/auth', authRoutes);
